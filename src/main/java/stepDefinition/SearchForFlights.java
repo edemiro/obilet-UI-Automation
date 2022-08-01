@@ -5,6 +5,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import pageObject.*;
 
 public class SearchForFlights extends BasePage {
@@ -13,6 +14,16 @@ public class SearchForFlights extends BasePage {
     FlightPage flightPage;
     FlightsListPage flightsListPage;
     PaymentPage paymentPage;
+    String departureFirmName;
+    String flightDepartureOriginTime;
+    String flightDepartureArrivalTime;
+    String flightDepartureOriginAirport;
+    String flightDepartureArrivalAirport;
+    String returnFirmName;
+    String flightReturnOriginTime;
+    String flightReturnArrivalTime;
+    String flightReturnOriginAirport;
+    String flightReturnArrivalAirport;
 
     @Before
     public static void setup() {
@@ -59,6 +70,11 @@ public class SearchForFlights extends BasePage {
     public void check_the_flights_are_listed() {
         flightsListPage = new FlightsListPage();
         flightsListPage.checkFlightTitle();
+        departureFirmName = flightsListPage.getDepartureFirmName();
+        flightDepartureOriginTime = flightsListPage.flightDepartureOriginTime();
+        flightDepartureArrivalTime = flightsListPage.flightDepartureArrivalTime();
+        flightDepartureOriginAirport = flightsListPage.flightDepartureOriginAirport();
+        flightDepartureArrivalAirport = flightsListPage.flightDepartureArrivalAirport();
     }
 
     @When("The user chooses Depart flight")
@@ -68,6 +84,11 @@ public class SearchForFlights extends BasePage {
 
     @When("The user chooses Return flight")
     public void the_user_chooses_return_flight() {
+        returnFirmName = flightsListPage.getReturnFirmName();
+        flightReturnOriginTime = flightsListPage.flightReturnOriginTime();
+        flightReturnArrivalTime = flightsListPage.flightReturnArrivalTime();
+        flightReturnOriginAirport = flightsListPage.flightReturnOriginAirport();
+        flightReturnArrivalAirport = flightsListPage.flightReturnArrivalAirport();
         flightsListPage.chooseReturnListedFlights();
     }
 
@@ -81,11 +102,21 @@ public class SearchForFlights extends BasePage {
     @Then("Check the Depart flight info is correct")
     public void check_the_depart_flight_info_is_correct() {
         paymentPage.checkDepartFlightInfo();
+        Assert.assertTrue(paymentPage.getDepartureFirmName().contains(departureFirmName));
+        Assert.assertTrue(paymentPage.flightDepartureAirportAndTime().contains(flightDepartureOriginTime));
+        Assert.assertTrue(paymentPage.flightArrivalAirportAndTime().contains(flightDepartureArrivalTime));
+        Assert.assertTrue(paymentPage.flightDepartureAirportAndTime().contains(flightDepartureOriginAirport));
+        Assert.assertTrue(paymentPage.flightArrivalAirportAndTime().contains(flightDepartureArrivalAirport));
     }
 
     @Then("Check the Return flight info is correct")
     public void check_the_return_flight_info_is_correct() {
         paymentPage.checkReturnFlightInfo();
+        Assert.assertTrue(paymentPage.getReturnFirmName().contains(returnFirmName));
+        Assert.assertTrue(paymentPage.flightReturnOriginAirportAndTime().contains(flightReturnOriginTime));
+        Assert.assertTrue(paymentPage.flightReturnArrivalAirportAndTime().contains(flightReturnArrivalTime));
+        Assert.assertTrue(paymentPage.flightReturnOriginAirportAndTime().contains(flightReturnOriginAirport));
+        Assert.assertTrue(paymentPage.flightReturnArrivalAirportAndTime().contains(flightReturnArrivalAirport));
     }
 
     @After
